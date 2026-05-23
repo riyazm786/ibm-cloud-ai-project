@@ -1,15 +1,23 @@
+import streamlit as st
 import psutil
+import pandas as pd
 import time
 
-print("AI-Based Cloud Resource Monitoring System")
-print("-----------------------------------------")
+st.title("AI-Based Cloud Resource Monitoring Dashboard")
 
-while True:
-    cpu = psutil.cpu_percent(interval=1)
-    memory = psutil.virtual_memory().percent
+cpu = psutil.cpu_percent(interval=1)
+memory = psutil.virtual_memory().percent
 
-    print(f"CPU Usage: {cpu}%")
-    print(f"Memory Usage: {memory}%")
-    print("--------------------------------")
+st.subheader("System Performance")
 
-    time.sleep(2)
+st.write(f"CPU Usage: {cpu}%")
+st.write(f"Memory Usage: {memory}%")
+
+data = {
+    "Resource": ["CPU", "Memory"],
+    "Usage": [cpu, memory]
+}
+
+df = pd.DataFrame(data)
+
+st.bar_chart(df.set_index("Resource"))
