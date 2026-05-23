@@ -1,23 +1,21 @@
 import streamlit as st
-import psutil
-import pandas as pd
-import time
+from monitor import get_system_data
+from visualize import create_dataframe
 
 st.title("AI-Based Cloud Resource Monitoring Dashboard")
 
-cpu = psutil.cpu_percent(interval=1)
-memory = psutil.virtual_memory().percent
+system_data = get_system_data()
+
+cpu = system_data["CPU Usage"]
+memory = system_data["Memory Usage"]
 
 st.subheader("System Performance")
 
 st.write(f"CPU Usage: {cpu}%")
 st.write(f"Memory Usage: {memory}%")
 
-data = {
-    "Resource": ["CPU", "Memory"],
-    "Usage": [cpu, memory]
-}
-
-df = pd.DataFrame(data)
+df = create_dataframe(cpu, memory)
 
 st.bar_chart(df.set_index("Resource"))
+
+st.success("Monitoring Completed Successfully")
